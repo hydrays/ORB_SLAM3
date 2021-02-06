@@ -301,6 +301,14 @@ bool Tracking::ParseCamParamFile(cv::FileStorage &fSettings)
         if(mDistCoef.rows==5)
             std::cout << "- k3: " << mDistCoef.at<float>(4) << std::endl;
 
+	if(mDistCoef.rows==8)
+	  {
+	    cout << "- k3: " << mDistCoef.at<float>(4) << endl;
+	    cout << "- k4: " << mDistCoef.at<float>(5) << endl;
+	    cout << "- k5: " << mDistCoef.at<float>(6) << endl;
+	    cout << "- k6: " << mDistCoef.at<float>(7) << endl;
+	  }
+	
         mK = cv::Mat::eye(3,3,CV_32F);
         mK.at<float>(0,0) = fx;
         mK.at<float>(1,1) = fy;
@@ -3533,6 +3541,26 @@ void Tracking::ChangeCalibration(const string &strSettingPath)
         DistCoef.resize(5);
         DistCoef.at<float>(4) = k3;
     }
+
+    const float k4 = fSettings["Camera.k4"];
+    if(k4!=0)
+    {
+        DistCoef.resize(6);
+        DistCoef.at<float>(5) = k4;
+    }
+    const float k5 = fSettings["Camera.k5"];
+    if(k5!=0)
+    {
+        DistCoef.resize(7);
+        DistCoef.at<float>(6) = k5;
+    }
+    const float k6 = fSettings["Camera.k6"];
+    if(k6!=0)
+    {
+        DistCoef.resize(8);
+        DistCoef.at<float>(7) = k6;
+    }
+    
     DistCoef.copyTo(mDistCoef);
 
     mbf = fSettings["Camera.bf"];
